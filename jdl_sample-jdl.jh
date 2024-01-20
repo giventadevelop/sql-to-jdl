@@ -1,0 +1,74 @@
+enum Gender {
+    MALE, FEMALE
+}
+
+entity Departments(departments) {
+    deptNo String required maxlength(4),
+    deptName String required unique maxlength(40)
+}
+
+
+entity DeptEmp(dept_emp) {
+    fromDate LocalDate required,
+    toDate LocalDate required
+}
+
+entity DeptManager(dept_manager) {
+    fromDate LocalDate required,
+    toDate LocalDate required
+}
+
+entity Employees(employees) {
+    empNo Integer required,
+    birthDate LocalDate required,
+    firstName String required maxlength(14),
+    lastName String required maxlength(16),
+    gender Gender required,
+    hireDate LocalDate required
+}
+
+entity Salaries(salaries) {
+    salary Integer required,
+    fromDate LocalDate required,
+    toDate LocalDate required
+}
+
+entity Titles(titles) {
+    title String required maxlength(50),
+    fromDate LocalDate required,
+    toDate LocalDate
+}
+
+// Relations
+relationship ManyToOne {
+    DeptEmp{empNo required} to Employees{deptEmp}
+}
+
+relationship ManyToOne {
+    DeptEmp{deptNo(dept_name) required} to Departments{deptEmp}
+}
+
+relationship ManyToOne {
+    DeptManager{empNo required} to Employees{deptManager}
+}
+
+relationship ManyToOne {
+    DeptManager{deptNo(dept_name) required} to Departments{deptManager}
+}
+
+relationship ManyToOne {
+    Salaries{empNo required} to Employees{salaries}
+}
+
+relationship ManyToOne {
+    Titles{empNo required} to Employees{titles}
+}
+
+// Options
+service * with serviceClass
+
+paginate * with pagination
+
+dto * with mapstruct
+
+filter *
